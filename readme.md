@@ -1,4 +1,4 @@
-# Stripe Payment Process using React, Node.js, TypeScript, and Prisma
+# Stripe Payment Process using React, Node.js, TypeScript, and Prisma 💳
 
 ## Project Description
 
