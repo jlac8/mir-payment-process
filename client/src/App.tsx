@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ProductCard from "./components/ProductCard";
-import { Product } from "./types";
+import type { Product } from "./types";
 import Header from "./components/Header";
 import { PaymentModal } from "./components/PaymentModal";
 import products from "@/assets/data.json";

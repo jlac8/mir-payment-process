@@ -17,7 +17,7 @@ import {
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Label } from "./ui/label";
-import { Payload } from "@/types";
+import type { Payload } from "@/types";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_CLIENT_SECRET);
 const apiUrl = import.meta.env.VITE_API_URL;

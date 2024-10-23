@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "./ui/button";
-import { Product } from "@/types";
+import type { Product } from "@/types";
 
 export default function ProductCard({
   product,
