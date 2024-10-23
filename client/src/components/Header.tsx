@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { Product } from "@/types";
+import type { Product } from "@/types";
 import { Badge } from "./ui/badge";
 import { ScrollArea } from "./ui/scroll-area";
 
