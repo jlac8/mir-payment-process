@@ -17,7 +17,6 @@ The goal is to allow users to select a product on a web page and securely proces
 ## Project Structure
 
 ```lua
-Copy code
 /client   --> Contains the frontend code
 /server   --> Contains the backend code
 ```
