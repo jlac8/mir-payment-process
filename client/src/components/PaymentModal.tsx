@@ -17,8 +17,21 @@ import {
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Label } from "./ui/label";
+import { Payload } from "@/types";
 
-const stripePromise = loadStripe("stripe_public_key");
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_CLIENT_SECRET);
+const apiUrl = import.meta.env.VITE_API_URL;
+
+const sendDataToBackend = async (data: Payload) => {
+  const res = await fetch(`${apiUrl}/api/checkout/create-payment-intent`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+};
 
 function CheckoutForm({
   total,
@@ -55,12 +68,20 @@ function CheckoutForm({
           error.message || "Ha ocurrido un error al procesar el pago."
         );
         setIsProcessing(false);
-      } else {
-        console.log("Payment Method:", paymentMethod);
-        setIsProcessing(false);
-        onClose();
-        alert("¡Pago procesado con éxito!");
       }
+
+      setIsProcessing(false);
+
+      const resFromBack = await sendDataToBackend({
+        amount: total * 100,
+        paymentMethod,
+        currency: "USD",
+        userId: "1",
+      });
+      console.log("resBack", resFromBack);
+
+      onClose();
+      alert("¡Pago procesado con éxito!");
     }
   };
 
