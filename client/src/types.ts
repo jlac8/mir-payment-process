@@ -12,5 +12,15 @@ export interface Payload {
   amount: number;
   paymentMethod?: PaymentMethod;
   currency: string;
-  userId?: string;
+  userId?: number;
+}
+
+export interface CartContextProps {
+  cart: Product[];
+  setCart: (cart: Product[]) => void;
+  isModalOpen: boolean;
+  setIsModalOpen: (isModalOpen: boolean) => void;
+  addToCart: (product: Product) => void;
+  removeFromCart: (productId: string) => void;
+  total: number;
 }

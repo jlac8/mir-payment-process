@@ -7,21 +7,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { Product } from "@/types";
 import { Badge } from "./ui/badge";
 import { ScrollArea } from "./ui/scroll-area";
+import { CartContext } from "@/context/CartContext";
+import { useContext } from "react";
 
-export default function Header({
-  cart,
-  total,
-  removeFromCart,
-  setIsPaymentModalOpen,
-}: {
-  cart: Product[];
-  total: number;
-  removeFromCart: (productId: string) => void;
-  setIsPaymentModalOpen: (isOpen: boolean) => void;
-}) {
+export default function Header() {
+  const { cart, total, removeFromCart, setIsModalOpen } =
+    useContext(CartContext);
+
   return (
     <header className="flex justify-between items-center mb-8">
       <h1 className="text-3xl font-bold">Mi Tienda Online 👨🏻‍💻</h1>
@@ -75,7 +69,7 @@ export default function Header({
             <Button
               className="w-full"
               disabled={cart.length === 0}
-              onClick={() => setIsPaymentModalOpen(true)}
+              onClick={() => setIsModalOpen(true)}
             >
               Proceder al pago
             </Button>

@@ -15,22 +15,27 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Label } from "./ui/label";
 import { Payload } from "@/types";
+import { CartContext } from "@/context/CartContext";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_CLIENT_SECRET);
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const sendDataToBackend = async (data: Payload) => {
-  const res = await fetch(`${apiUrl}/api/checkout/create-payment-intent`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  return res.json();
+  try {
+    const res = await fetch(`${apiUrl}/api/checkout/create-payment-intent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 function CheckoutForm({
@@ -44,6 +49,8 @@ function CheckoutForm({
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  const { setCart } = useContext(CartContext);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -76,12 +83,13 @@ function CheckoutForm({
         amount: total * 100,
         paymentMethod,
         currency: "USD",
-        userId: "1",
+        userId: 1,
       });
       console.log("resBack", resFromBack);
 
       onClose();
       alert("¡Pago procesado con éxito!");
+      setCart([]);
     }
   };
 
@@ -105,17 +113,10 @@ function CheckoutForm({
   );
 }
 
-export function PaymentModal({
-  isOpen,
-  onClose,
-  total,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  total: number;
-}) {
+export function PaymentModal() {
+  const { isModalOpen, setIsModalOpen, total } = useContext(CartContext);
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Completar Pago</DialogTitle>
@@ -124,7 +125,7 @@ export function PaymentModal({
           </DialogDescription>
         </DialogHeader>
         <Elements stripe={stripePromise}>
-          <CheckoutForm total={total} onClose={onClose} />
+          <CheckoutForm total={total} onClose={() => setIsModalOpen(false)} />
         </Elements>
       </DialogContent>
     </Dialog>
