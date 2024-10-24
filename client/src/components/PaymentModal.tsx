@@ -50,7 +50,7 @@ function CheckoutForm({
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
-  const { setCart } = useContext(CartContext);
+  const { updateCart } = useContext(CartContext);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -78,18 +78,18 @@ function CheckoutForm({
       }
 
       setIsProcessing(false);
-
       const resFromBack = await sendDataToBackend({
         amount: total * 100,
         paymentMethod,
         currency: "USD",
         userId: 1,
       });
+      console.log("total", total * 100);
       console.log("resBack", resFromBack);
 
       onClose();
       alert("¡Pago procesado con éxito!");
-      setCart([]);
+      updateCart([]);
     }
   };
 

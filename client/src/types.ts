@@ -6,6 +6,7 @@ export interface Product {
   price: number;
   description?: string;
   image: string;
+  quantity?: number;
 }
 
 export interface Payload {
@@ -17,10 +18,10 @@ export interface Payload {
 
 export interface CartContextProps {
   cart: Product[];
-  setCart: (cart: Product[]) => void;
-  isModalOpen: boolean;
-  setIsModalOpen: (isModalOpen: boolean) => void;
+  updateCart: (product: Product[]) => void;
   addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
   total: number;
+  isModalOpen: boolean;
+  setIsModalOpen: (isModalOpen: boolean) => void;
 }

@@ -12,6 +12,11 @@ import { CartContext } from "@/context/CartContext";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useContext(CartContext);
+
+  const handleAddToCart = () => {
+    addToCart({ ...product, quantity: 1 });
+  };
+
   return (
     <Card className="flex flex-col justify-between">
       <CardHeader>
@@ -31,7 +36,7 @@ export default function ProductCard({ product }: { product: Product }) {
       </CardContent>
       <CardFooter className="flex justify-between">
         <span className="text-lg font-bold">${product.price}</span>
-        <Button onClick={() => addToCart(product)}>Agregar al carrito</Button>
+        <Button onClick={handleAddToCart}>Agregar al carrito</Button>
       </CardFooter>
     </Card>
   );

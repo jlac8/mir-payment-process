@@ -13,8 +13,18 @@ import { CartContext } from "@/context/CartContext";
 import { useContext } from "react";
 
 export default function Header() {
-  const { cart, total, removeFromCart, setIsModalOpen } =
+  const { cart, total, removeFromCart, setIsModalOpen, updateCart } =
     useContext(CartContext);
+
+  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+
+  const handleQuantityChange = (itemId: string, newQuantity: number) => {
+    const updatedCart = cart.map((item) =>
+      item.id === itemId ? { ...item, quantity: newQuantity } : item
+    );
+    updateCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
 
   return (
     <header className="flex justify-between items-center mb-8">
@@ -23,9 +33,9 @@ export default function Header() {
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="relative">
             <ShoppingCart className="h-6 w-6" />
-            {cart.length > 0 && (
+            {totalItems > 0 && (
               <Badge variant="destructive" className="absolute -top-2 -right-2">
-                {cart.length}
+                {totalItems}
               </Badge>
             )}
           </Button>
@@ -46,7 +56,21 @@ export default function Header() {
                     <div>
                       <h3 className="font-medium">{item.title}</h3>
                       <p className="text-sm text-muted-foreground">
-                        ${item.price}
+                        ${item.price} x
+                        <input
+                          type="number"
+                          min="1"
+                          max="10"
+                          value={item.quantity}
+                          onChange={(e) =>
+                            handleQuantityChange(
+                              item.id,
+                              Number(e.target.value)
+                            )
+                          }
+                          className="mx-2 w-12 text-center border rounded bg-white"
+                        />
+                        = ${(item.price * (item.quantity || 1)).toFixed(2)}
                       </p>
                     </div>
                     <Button
